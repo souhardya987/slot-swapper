@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
-
 import authRoutes from './routes/auth.routes.js';
 import eventRoutes from './routes/event.routes.js';
 import swapRoutes from './routes/swap.routes.js';
@@ -11,14 +10,24 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors());
+
+app.use(
+  cors({
+    origin: [
+      "https://slot-swapperfrontend.onrender.com",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true
+  })
+);
+
 app.use(express.json());
+app.options('*', cors());
 
 app.get('/', (req, res) => {
-  res.send('server running successfull');
+  res.send('Server running successfully ');
 });
 
-// Define Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/swap', swapRoutes);
