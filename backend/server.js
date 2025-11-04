@@ -15,6 +15,7 @@ app.use(
   cors({
     origin: [
       "https://slot-swapperfrontend.onrender.com",
+      "http://localhost:5173"
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true
@@ -22,10 +23,9 @@ app.use(
 );
 
 app.use(express.json());
-app.options('*', cors());
 
 app.get('/', (req, res) => {
-  res.send('Server running successfully ');
+  res.send('Server running successfully');
 });
 
 app.use('/api/auth', authRoutes);
