@@ -1,8 +1,15 @@
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Layout = () => {
   const { user, logout } = useAuth();
+  const location = useLocation(); 
+  const getLinkClasses = (path) =>
+    `${
+      location.pathname === path
+        ? 'border-indigo-500 text-indigo-600' // active link (blue underline)
+        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' // inactive link
+    } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`;
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -10,32 +17,34 @@ const Layout = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex">
-              <Link to="/" className="shrink-0 flex items-center text-xl font-bold text-indigo-600">
+              <Link
+                to="/"
+                className="shrink-0 flex items-center text-xl font-bold text-indigo-600"
+              >
                 SlotSwapper
               </Link>
+
               {user && (
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                  <Link
-                    to="/"
-                    className="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                  >
+                  <Link to="/" className={getLinkClasses('/')}>
                     My Dashboard
                   </Link>
                   <Link
                     to="/marketplace"
-                    className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                    className={getLinkClasses('/marketplace')}
                   >
                     Marketplace
                   </Link>
                   <Link
                     to="/requests"
-                    className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                    className={getLinkClasses('/requests')}
                   >
                     My Requests
                   </Link>
                 </div>
               )}
             </div>
+
             <div className="flex items-center">
               {user ? (
                 <button
@@ -64,6 +73,7 @@ const Layout = () => {
           </div>
         </div>
       </nav>
+
       <main className="max-w-6xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <Outlet />
       </main>
